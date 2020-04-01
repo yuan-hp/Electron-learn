@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>图片查看</title>
+</head>
+<body>
+    <button id='openImgBtn'>打开我的图片</button>
+    <button id='saveBtn'>保存文件</button>
+    <button id='msgBoxBtn'>消息弹出测试</button>
+    <img id='disImg' style="width:100%" />
+</body>
+<script>
+    const {dialog}=require('electron').remote
+    const fs=require('fs')
+    var openImgBtn = document.getElementById('openImgBtn')
+    //打开对话框操作
+    openImgBtn.onclick=function(e){
+        dialog.showOpenDialog({//打开文件选择框
+            //properties: ['openFile', 'openDirectory'],
+            title:'我的图片',
+            defaultPath:'/home/yhp/Pictures',
+            buttonLabel:'打开图片',
+            filters:[
+                {name:'img',extensions:['jpg','png']}
+            ]    
+        }).then(result=>{//异步处理，显示图片
+            let imge = document.getElementById('disImg')
+            imge.setAttribute('src',result.filePaths[0])//设置图片路径
+        }).catch(err=>{//捕捉错误
+            console.log(err)
+        })
+    }
+    //保存文件对话框操作
+    var saveBtn = document.getElementById('saveBtn')
+    saveBtn.onclick=e=>{//打开保存对话框
+        dialog.showSaveDialog({
+            title:'保存文件',
+            defaultPath:'/media/yhp/_dde_data/JS/mApp/study_app3'
+        }).then(result=>{//处理保存的文件
+            fs.writeFileSync(result.filePath,'这是我保存的文件！')//同步写书数据
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
+
+    //消息盒子操作
+    var msgBoxBtn = document.getElementById('msgBoxBtn')
+    msgBoxBtn.onclick=function(){
+        dialog.showMessageBox({
+            style:'warning',
+            title:'去不去由你',
+            message:'要不要和我去大保健',
+            buttons:['去','不去','不太想去']
+        }).then(result=>{
+            //判断
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
+    
+
+</script>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+<body style="background-image: url(img/bg.jpg); background-size: 100%;">
+
+<audio id="myaudio"  controls='controls' style="clear:both;display:block;margin:auto">
+    Your browser does not support the audio element.
+</audio>
+<p></p>
+<button id='openMuicBtn' style="clear:both;display:block;margin:auto">选择音乐</button>
+</body>
+
+<script>
+   const {dialog}=require('electron').remote
+    const fs=require('fs')
+    var openMuicBtn = document.getElementById('openMuicBtn')
+    //打开对话框操作
+    openMuicBtn.onclick=function(e){
+        dialog.showOpenDialog({//打开文件选择框
+            //properties: ['openFile', 'openDirectory'],
+            title:'我的音乐',
+            defaultPath:'/home/yhp/Music',
+            buttonLabel:'打开音乐',  
+        }).then(result=>{//异步处理，加载音乐
+            let myaudio = document.getElementById('myaudio')
+            myaudio.setAttribute('src',result.filePaths[0])//设置音乐路径
+            //myaudio.setAttribute('controls','true')
+            myaudio.play()//播放
+        }).catch(err=>{//捕捉错误
+            console.log(err)
+        })
+    }
+</script>
+</html>

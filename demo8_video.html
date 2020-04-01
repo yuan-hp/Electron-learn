@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<body style="background-image: url(img/bg.jpg); background-size: 100%;">
+
+<video id='myvideo' width="320" height="240" controls='controls' style="clear:both;display:block;margin:auto">
+
+</video>
+<button id='openVdideocBtn' style="clear:both;display:block;margin:auto">选择视频</button>
+</body>
+
+<script>
+   const {dialog}=require('electron').remote
+    const fs=require('fs')
+    var openVdideocBtn = document.getElementById('openVdideocBtn')
+    //打开对话框操作
+    openVdideocBtn.onclick=function(e){
+        dialog.showOpenDialog({//打开文件选择框
+            //properties: ['openFile', 'openDirectory'],
+            title:'我的视频',
+            defaultPath:'/home/yhp/Videos',
+            buttonLabel:'打开视频',  
+        }).then(result=>{//异步处理，加载视频
+            let myvideo = document.getElementById('myvideo')
+            myvideo.setAttribute('src',result.filePaths[0])//设置音乐路径
+            //myaudio.setAttribute('controls','true')
+            myvideo.play()//播放
+        }).catch(err=>{//捕捉错误
+            console.log(err)
+        })
+    }
+</script>
+</html>
